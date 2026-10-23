@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "weight_policy": {
+    "version": 1,
+    "basis": "business_priority",
+    "core_min_share": 0.5
+  },
+  "gate_tests": [
+    "test_outputs.py::test_gate_requires_solved_response_equation"
+  ],
+  "tests": {
+    "test_outputs.py::test_negative_feedback_curve_recovers_gain_and_width": {
+      "weight": 0.14,
+      "priority": "core",
+      "rationale": "全局耦合离散方程同时恢复增益和核宽，是本题数值反演主任务。"
+    },
+    "test_outputs.py::test_broad_kernel_recovery_distinguishes_width_scale": {
+      "weight": 0.14,
+      "priority": "core",
+      "rationale": "较宽核对局部差分不敏感，只有解完整积分方程才能稳定识别。"
+    },
+    "test_outputs.py::test_positive_feedback_curve_recovers_continuous_gain": {
+      "weight": 0.14,
+      "priority": "core",
+      "rationale": "正反馈会放大整体响应，检验候选是否真正处理连续符号范围。"
+    },
+    "test_outputs.py::test_fitted_fredholm_system_closes_all_response_points": {
+      "weight": 0.14,
+      "priority": "core",
+      "rationale": "全部采样点的响应闭合证明参数与离散线性系统共同成立。"
+    },
+    "test_outputs.py::test_extra_top_level_key_stops_before_linear_solve": {
+      "weight": 0.1,
+      "priority": "schema",
+      "rationale": "额外字段可能改变曲线来源，应在建立矩阵前拒绝整份记录。"
+    },
+    "test_outputs.py::test_missing_right_endpoint_is_refused": {
+      "weight": 0.09,
+      "priority": "boundary",
+      "rationale": "积分区间未覆盖到一会使梯形权重缺边，必须阻止不完整标定。"
+    },
+    "test_outputs.py::test_boolean_response_is_refused_as_non_numeric": {
+      "weight": 0.09,
+      "priority": "boundary",
+      "rationale": "布尔响应伪装成零或一，会严重扭曲线性方程右端项。"
+    },
+    "test_outputs.py::test_eleven_samples_are_refused_before_linear_solve": {
+      "weight": 0.07,
+      "priority": "boundary",
+      "rationale": "不足十二个采样点无法稳定离散积分算子，应在建立线性系统前拒收。"
+    },
+    "test_outputs.py::test_output_is_compact_sorted_and_repeatable": {
+      "weight": 0.09,
+      "priority": "supporting",
+      "rationale": "稳定字节输出便于标定记录复核与多次运行结果比对。"
+    }
+  }
+}
